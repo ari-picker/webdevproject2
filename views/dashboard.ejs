@@ -37,7 +37,10 @@
               <label for="numQuestions" class="form-label">Number of Questions (1-10)</label>
               <input id="numQuestions" type="number" name="numQuestions" class="form-control" value="5" min="1" max="10">
             </div>
-            <button type="submit" class="btn btn-primary">Generate Quiz</button>
+            <button type="submit" class="btn btn-primary" id="generateBtn">
+              <span id="generateText">Generate Quiz</span>
+              <span id="generateSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+            </button>
           </form>
         </div>
       </div>
@@ -146,5 +149,24 @@
       </div>
     <% } %>
   </div>
+  <script>
+    // Loading spinner on generate button — shows a spinner and disables the button
+    document.querySelector('form[action="/quiz/generate"]')?.addEventListener('submit', function() {
+      var btn = document.getElementById('generateBtn');
+      if (btn) {
+        btn.disabled = true;
+        document.getElementById('generateText').textContent = 'Generating...';
+        document.getElementById('generateSpinner').classList.remove('d-none');
+      }
+    });
+
+    // Warn before leaving if a quiz is in progress
+    <% if (quiz && !result) { %>
+    window.addEventListener('beforeunload', function(e) {
+      e.preventDefault();
+      e.returnValue = '';
+    });
+    <% } %>
+  </script>
 </body>
 </html>
