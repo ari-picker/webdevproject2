@@ -1,0 +1,8 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "templateVersion": "0.1.1",
+  "instructions": [
+    "project_docs/structure.md",
+    "project_docs/conventions.md"
+  ]
+}
