@@ -16,3 +16,6 @@ build/
 *.log
 node_modules/
 webdev-notes/
+opencode.json
+FRICTION.md
+HANDOFF.md
