@@ -4,18 +4,30 @@ var router = express.Router();
 // Import the DB helper to fetch quiz history from MongoDB
 const { getCollection } = require('../models/db');
 
-// Visiting / redirects to the signup page
+// Visiting / redirects to dashboard if logged in, otherwise to signup
 router.get('/', function(req, res, next) {
-  res.redirect("/signup");
+  if (req.signedCookies.userName) {
+    res.redirect("/dashboard");
+  } else {
+    res.redirect("/signup");
+  }
 });
 
-// GET /signin — render the sign-in form (views/signin.ejs), pass error from query if redirected
+// GET /signin — redirect to dashboard if already logged in
 router.get('/signin', function(req, res, next) {
+  if (req.signedCookies.userName) {
+    res.redirect("/dashboard");
+    return;
+  }
   res.render("signin", { error: req.query.error || null });
 });
 
-// GET /signup — render the sign-up form (views/signup.ejs)
+// GET /signup — redirect to dashboard if already logged in
 router.get('/signup', function(req, res, next) {
+  if (req.signedCookies.userName) {
+    res.redirect("/dashboard");
+    return;
+  }
   res.render("signup", { error: req.query.error || null });
 });
 
