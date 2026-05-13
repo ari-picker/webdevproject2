@@ -83,21 +83,23 @@ The app uses a two-layer security architecture:
 ### Render (Hosting)
 The Express server runs on Render's free tier at `https://webdevproject2.onrender.com`. Render pulls the latest code from GitHub, installs dependencies, and starts the server. Environment variables (database URI, API keys) are set in Render's dashboard.
 
-### Cloudflare Proxy (DDoS protection + origin masking)
-All traffic routes through Cloudflare's edge network. Cloudflare proxies the domain and forwards legitimate traffic to Render:
+### Cloudflare DNS
+Cloudflare provides DNS-only (gray cloud) resolution for `quiz.ari.re` pointing to Render.
+
+### Origin Restriction
+The Express middleware in `app.js` checks the `Host` header — only requests with `Host: quiz.ari.re` are allowed. Direct access to `webdevproject2.onrender.com` returns a 403.
 
 ```
-User → quiz.ari.re → Cloudflare (proxied DNS) → Render (Express server)
+User → quiz.ari.re → Cloudflare DNS → Render (Express server checks Host header)
+Direct Render URL → 403 blocked
 ```
 
-The Express middleware in `app.js` checks for Cloudflare's `cf-ray` header — Cloudflare adds this header to every proxied request. Requests without it (direct Render URL access) get a 403. This hides the origin server completely.
-
-### Cloudflare DNS Setup
+### Cloudflare DNS Record
 ```
 Type: CNAME
 Name: quiz
 Target: webdevproject2.onrender.com
-Proxy status: Proxied (orange cloud)
+Proxy status: DNS only (gray cloud)
 ```
 
 ## Test Credentials

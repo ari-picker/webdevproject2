@@ -35,8 +35,8 @@ app.use(function(req, res, next) {
     next();
     return;
   }
-  if (!req.headers['cf-ray']) {
-    res.status(403).send("Access denied. This site must be accessed through Cloudflare.");
+  if (req.hostname !== 'quiz.ari.re') {
+    res.status(403).send("Access denied. Only accessible via quiz.ari.re");
     return;
   }
   next();
