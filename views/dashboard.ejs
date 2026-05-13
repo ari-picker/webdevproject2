@@ -160,11 +160,15 @@
       }
     });
 
-    // Warn before leaving if a quiz is in progress
+    // Warn before leaving if a quiz is in progress — but not when submitting the form
     <% if (quiz && !result) { %>
-    window.addEventListener('beforeunload', function(e) {
+    function onBeforeUnload(e) {
       e.preventDefault();
       e.returnValue = '';
+    }
+    window.addEventListener('beforeunload', onBeforeUnload);
+    document.querySelector('form[action="/quiz/submit"]')?.addEventListener('submit', function() {
+      window.removeEventListener('beforeunload', onBeforeUnload);
     });
     <% } %>
   </script>
