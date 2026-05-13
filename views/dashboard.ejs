@@ -13,8 +13,10 @@
   <%- include('partials/header') %>
   <div class="container mt-4">
     <!-- <%= %> outputs a value into the HTML. <% %> runs code without outputting -->
-    <h1>Welcome, <%= name %></h1>
-    <p class="lead">Generate a quiz on any topic using AI.</p>
+    <div class="mb-4">
+      <h1 class="display-6">Welcome, <%= name %></h1>
+      <p class="lead" style="color: var(--text-muted-custom, #a0a0b8);">Generate a quiz on any topic using AI.</p>
+    </div>
 
     <!-- If the server passed an error message, show it as a red alert -->
     <% if (error) { %>
