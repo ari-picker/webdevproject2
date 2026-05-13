@@ -1,36 +1,45 @@
+// Create a router — like FastAPI's APIRouter, groups related routes in one file
 var express = require('express');
 var router = express.Router();
+// Import the DB helper to fetch quiz history from MongoDB
 const { getCollection } = require('../models/db');
 
+// Visiting / redirects to the signup page
 router.get('/', function(req, res, next) {
   res.redirect("/signup");
 });
 
+// GET /signin — render the sign-in form (views/signin.ejs)
 router.get('/signin', function(req, res, next) {
   res.render("signin");
 });
 
+// GET /signup — render the sign-up form (views/signup.ejs)
 router.get('/signup', function(req, res, next) {
   res.render("signup");
 });
 
+// GET /dashboard — main page, requires the user to be logged in (cookie check)
 router.get('/dashboard', async function(req, res, next) {
-  let name = req.cookies.userName;
+  let name = req.signedCookies.userName;
   if (!name) {
     res.redirect("/signin");
     return;
   }
+  // Fetch the user's last 10 quiz attempts from MongoDB, newest first
   let history = [];
   try {
     let conn = getCollection("quiz_history");
-    history = await conn.find({ userEmail: req.cookies.userEmail })
+    history = await conn.find({ userEmail: req.signedCookies.userEmail })
       .sort({ timestamp: -1 }).limit(10).toArray();
   } catch(e) {
     console.error(e);
   }
+  // Render the dashboard, passing user data + history (quiz and result are null on first load)
   res.render("dashboard", { name: name, quiz: null, result: null, error: null, history: history });
 });
 
+// GET /users/logout — clear the login cookies and redirect to sign-in page
 router.get('/users/logout', function(req, res, next) {
   res.clearCookie("userName");
   res.clearCookie("userEmail");

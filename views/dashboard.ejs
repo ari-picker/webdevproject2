@@ -9,18 +9,23 @@
   <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
+  <!-- Include the Bootstrap navbar partial -->
   <%- include('partials/header') %>
   <div class="container mt-4">
+    <!-- <%= %> outputs a value into the HTML. <% %> runs code without outputting -->
     <h1>Welcome, <%= name %></h1>
     <p class="lead">Generate a quiz on any topic using AI.</p>
 
+    <!-- If the server passed an error message, show it as a red alert -->
     <% if (error) { %>
       <div class="alert alert-danger"><%= error %></div>
     <% } %>
 
+    <!-- State 1: No quiz exists yet — show the generation form -->
     <% if (!quiz) { %>
       <div class="card">
         <div class="card-body">
+          <!-- POST to /quiz/generate triggers the Groq API call in routes/quiz.js -->
           <form method="POST" action="/quiz/generate">
             <div class="mb-3">
               <label for="topic" class="form-label">Topic</label>
@@ -36,14 +41,17 @@
       </div>
     <% } %>
 
+    <!-- State 2: Quiz generated but not yet answered — show all questions with radio buttons -->
     <% if (quiz && !result) { %>
       <div class="card mt-3">
         <div class="card-body">
           <h2><%= quiz.title %></h2>
           <form method="POST" action="/quiz/submit">
+            <!-- Hidden fields carry the quiz data so the server can score it -->
             <input type="hidden" name="title" value="<%= quiz.title %>">
             <input type="hidden" name="topic" value="<%= quiz.topic %>">
             <input type="hidden" name="questionsJson" value='<%= JSON.stringify(quiz.questions) %>'>
+            <!-- Loop through each question — name="q0", name="q1" etc. match req.body["q"+i] in quiz.js -->
             <% quiz.questions.forEach(function(q, i) { %>
               <div class="mb-4 p-3 border rounded">
                 <p class="fw-bold"><%= i + 1 %>. <%= q.question %></p>
@@ -62,21 +70,26 @@
       </div>
     <% } %>
 
+    <!-- State 3: User submitted answers — show score, progress bar, and per-question feedback -->
     <% if (result) { %>
       <div class="card mt-3">
         <div class="card-body">
           <h2>Results</h2>
+          <!-- Overall score -->
           <p class="display-6"><%= result.score %> / <%= result.total %> correct</p>
+          <!-- Progress bar: color changes based on percentage (green >= 70%, yellow >= 40%, red below) -->
           <div class="progress mb-4">
             <div class="progress-bar <% if (result.score / result.total >= 0.7) { %>bg-success<% } else if (result.score / result.total >= 0.4) { %>bg-warning<% } else { %>bg-danger<% } %>" style="width: <%= (result.score / result.total) * 100 %>%">
               <%= Math.round((result.score / result.total) * 100) %>%
             </div>
           </div>
+          <!-- Per-question breakdown — green border for correct, red for wrong -->
           <% result.results.forEach(function(r, i) { %>
             <div class="mb-3 p-3 border rounded <%= r.correct ? 'border-success' : 'border-danger' %>">
               <p class="fw-bold"><%= i + 1 %>. <%= r.question %></p>
               <% r.options.forEach(function(opt, j) { %>
                 <div class="form-check">
+                  <!-- Disabled radio buttons show the correct answer + user's answer -->
                   <input class="form-check-input" type="radio" disabled
                     <% if (j === r.correctIndex) { %>checked<% } %>
                     <% if (j === r.correctIndex) { %>class="bg-success"<% } %>>
@@ -94,6 +107,7 @@
       </div>
     <% } %>
 
+    <!-- State 4: History table — only on the initial dashboard, hidden during active quizzes -->
     <% if (history && history.length > 0 && !quiz) { %>
       <div class="card mt-4">
         <div class="card-body">
@@ -111,10 +125,12 @@
               <tbody>
                 <% history.forEach(function(h) { %>
                   <tr>
+                    <!-- toLocaleDateString formats the timestamp for the user's local timezone -->
                     <td><%= h.timestamp.toLocaleDateString ? h.timestamp.toLocaleDateString() : h.timestamp %></td>
                     <td><%= h.topic %></td>
                     <td><%= h.score %> / <%= h.total %></td>
                     <td>
+                      <!-- Color-coded badge: green >= 70%, yellow >= 40%, red below -->
                       <span class="badge <% if (h.percentage >= 70) { %>bg-success<% } else if (h.percentage >= 40) { %>bg-warning text-dark<% } else { %>bg-danger<% } %>">
                         <%= h.percentage %>%
                       </span>
