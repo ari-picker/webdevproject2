@@ -23,7 +23,7 @@ router.post("/signup/submit", async (req, res) => {
     res.redirect("/signin");
   } catch(e) {
     console.error(e);
-    res.redirect("/signup");
+    res.redirect("/signup?error=That email may already be in use. Try signing in instead.");
   }
 });
 
@@ -36,7 +36,7 @@ router.post("/signin/submit", async (req, res) => {
     // Look up the user by email
     let dbuser = await conn.findOne({email: email});
     if (!dbuser) {
-      res.redirect("/signin");
+      res.redirect("/signin?error=No account found with that email");
       return;
     }
     // Re-hash the provided password with the stored salt and compare
@@ -50,11 +50,11 @@ router.post("/signin/submit", async (req, res) => {
       res.cookie("userEmail", dbuser.email, { signed: true });
       res.render("dashboard", { name: dbuser.name, quiz: null, result: null, error: null });
     } else {
-      res.redirect("/signin");
+      res.redirect("/signin?error=Incorrect password");
     }
   } catch(e) {
     console.error(e);
-    res.redirect("/signin");
+    res.redirect("/signin?error=Something went wrong. Please try again.");
   }
 });
 

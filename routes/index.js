@@ -9,14 +9,14 @@ router.get('/', function(req, res, next) {
   res.redirect("/signup");
 });
 
-// GET /signin — render the sign-in form (views/signin.ejs)
+// GET /signin — render the sign-in form (views/signin.ejs), pass error from query if redirected
 router.get('/signin', function(req, res, next) {
-  res.render("signin");
+  res.render("signin", { error: req.query.error || null });
 });
 
 // GET /signup — render the sign-up form (views/signup.ejs)
 router.get('/signup', function(req, res, next) {
-  res.render("signup");
+  res.render("signup", { error: req.query.error || null });
 });
 
 // GET /dashboard — main page, requires the user to be logged in (cookie check)
