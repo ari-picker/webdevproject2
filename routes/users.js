@@ -48,7 +48,16 @@ router.post("/signin/submit", async (req, res) => {
       // If someone tries to edit the cookie, req.signedCookies returns undefined
       res.cookie("userName", dbuser.name, { signed: true });
       res.cookie("userEmail", dbuser.email, { signed: true });
-      res.render("dashboard", { name: dbuser.name, quiz: null, result: null, error: null });
+      // Fetch quiz history for the newly signed-in user
+      let history = [];
+      try {
+        let histConn = getCollection("quiz_history");
+        history = await histConn.find({ userEmail: dbuser.email })
+          .sort({ timestamp: -1 }).limit(10).toArray();
+      } catch(e) {
+        console.error(e);
+      }
+      res.render("dashboard", { name: dbuser.name, quiz: null, result: null, error: null, history: history });
     } else {
       res.redirect("/signin?error=Incorrect password");
     }
