@@ -30,18 +30,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req, res, next) {
-  if (req.hostname === 'localhost' || req.hostname === '127.0.0.1') {
-    next();
-    return;
-  }
-  if (req.hostname !== 'quiz.ari.re') {
-    res.status(403).send("Access denied. Only accessible via quiz.ari.re");
-    return;
-  }
-  next();
-});
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/quiz', quizRouter);

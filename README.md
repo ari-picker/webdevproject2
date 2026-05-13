@@ -76,35 +76,13 @@ A full-stack web application that generates multiple-choice quizzes on any topic
 | POST   | `/quiz/submit`      | Submit answers       | Yes |
 | GET    | `/users/logout`     | Log out              | Yes |
 
-## Deployment Architecture
+## Deployment
 
-The app uses a two-layer security architecture:
-
-### Render (Hosting)
-The Express server runs on Render's free tier at `https://webdevproject2.onrender.com`. Render pulls the latest code from GitHub, installs dependencies, and starts the server. Environment variables (database URI, API keys) are set in Render's dashboard.
-
-### Cloudflare DNS
-Cloudflare provides DNS-only (gray cloud) resolution for `quiz.ari.re` pointing to Render.
-
-### Origin Restriction
-The Express middleware in `app.js` checks the `Host` header — only requests with `Host: quiz.ari.re` are allowed. Direct access to `webdevproject2.onrender.com` returns a 403.
-
-```
-User → quiz.ari.re → Cloudflare DNS → Render (Express server checks Host header)
-Direct Render URL → 403 blocked
-```
-
-### Cloudflare DNS Record
-```
-Type: CNAME
-Name: quiz
-Target: webdevproject2.onrender.com
-Proxy status: DNS only (gray cloud)
-```
+The app is hosted on Render's free tier at `https://webdevproject2.onrender.com`.
 
 ## Test Credentials
 
-1. Visit `https://quiz.ari.re`
+1. Visit `https://webdevproject2.onrender.com`
 2. Create an account at `/signup`
 3. Sign in and generate a quiz
 
