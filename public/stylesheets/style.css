@@ -1,4 +1,5 @@
-/* Custom color palette */
+/* CSS custom properties (variables) defined on :root so they're available everywhere.
+   --accent is the main purple theme color, used for buttons, borders, glows, etc. */
 :root {
   --accent: #6c5ce7;
   --accent-hover: #5a4bd1;
@@ -13,13 +14,14 @@ body {
   background: var(--bg-body);
 }
 
-/* Navbar with gradient accent */
+/* Navbar: gradient background instead of Bootstrap's solid dark */
 .navbar {
   background: linear-gradient(135deg, #1e1e2e 0%, #2a1e3e 100%) !important;
   border-bottom: 1px solid var(--border-subtle);
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
 }
 
+/* Brand text uses a gradient that's clipped to the text shape */
 .navbar-brand {
   font-weight: 700;
   letter-spacing: -0.5px;
@@ -29,39 +31,40 @@ body {
   background-clip: text;
 }
 
+/* Nav links use ::after to create an animated underline on hover */
 .nav-link {
   position: relative;
   transition: color 0.2s;
 }
 
 .nav-link::after {
-  content: '';
+  content: '';               /* Required for pseudo-elements to render */
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 0;
+  width: 0;                  /* Hidden by default */
   height: 2px;
   background: var(--accent);
-  transition: width 0.3s;
+  transition: width 0.3s;    /* Animate the width change on hover */
 }
 
 .nav-link:hover::after,
 .nav-link.active::after {
-  width: 80%;
+  width: 80%;                /* Expands underline on hover/active */
 }
 
-/* Cards with glassmorphism */
+/* Cards: glassmorphism-inspired dark cards with rounded corners and subtle purple borders */
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;  /* Smooth hover lift */
 }
 
 .card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-2px);        /* Slight upward lift on hover */
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
@@ -70,7 +73,7 @@ body {
   font-weight: 700;
 }
 
-/* Custom buttons */
+/* Custom buttons: gradient backgrounds, rounded, with hover lift and glow shadows */
 .btn-primary {
   background: linear-gradient(135deg, var(--accent), var(--accent-hover));
   border: none;
@@ -87,7 +90,7 @@ body {
 }
 
 .btn-primary:active {
-  transform: translateY(0);
+  transform: translateY(0);        /* Presses button back down on click */
 }
 
 .btn-success {
@@ -119,7 +122,7 @@ body {
   color: #fff;
 }
 
-/* Form inputs */
+/* Form inputs: dark transparent background, rounded, purple glow on focus */
 .form-control {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -132,7 +135,7 @@ body {
 .form-control:focus {
   background: rgba(255, 255, 255, 0.08);
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-glow);
+  box-shadow: 0 0 0 3px var(--accent-glow);  /* Purple ring instead of Bootstrap's blue */
   color: #fff;
 }
 
@@ -147,7 +150,7 @@ body {
   margin-bottom: 6px;
 }
 
-/* Section headers */
+/* Section headers: gradient on the welcome display, purple accent bar on h2 */
 h1, h2, h3 {
   font-weight: 700;
   letter-spacing: -0.3px;
@@ -166,7 +169,7 @@ h2 {
   padding-left: 12px;
 }
 
-/* Progress bar */
+/* Progress bar: rounded pill shape, transparent background */
 .progress {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 20px;
@@ -180,11 +183,7 @@ h2 {
   font-size: 0.8rem;
 }
 
-/* Quiz question borders */
-.border-rounded {
-  border-radius: 12px;
-}
-
+/* Result borders: green for correct, red for wrong, with matching transparent backgrounds */
 .border-success {
   border-color: #00b894 !important;
   background: rgba(0, 184, 148, 0.05);
@@ -195,14 +194,14 @@ h2 {
   background: rgba(214, 48, 49, 0.05);
 }
 
-/* Badge styling */
+/* Badges: compact rounded pills */
 .badge {
   border-radius: 6px;
   padding: 4px 10px;
   font-weight: 600;
 }
 
-/* Table */
+/* Table: dark theme with subtle alternating rows */
 .table {
   color: #ccc;
 }
@@ -215,7 +214,7 @@ h2 {
   border-bottom-color: rgba(255, 255, 255, 0.05);
 }
 
-/* Validation feedback */
+/* Validation: Bootstrap's was-validated class triggers red borders on invalid fields */
 .was-validated .form-control:invalid,
 .form-control.is-invalid {
   border-color: #d63031;
@@ -227,7 +226,7 @@ h2 {
   font-size: 0.85rem;
 }
 
-/* Alert customization */
+/* Alerts: transparent red background with border */
 .alert-danger {
   background: rgba(214, 48, 49, 0.1);
   border: 1px solid rgba(214, 48, 49, 0.3);
@@ -235,7 +234,7 @@ h2 {
   border-radius: 10px;
 }
 
-/* Radio buttons */
+/* Radio buttons: purple accent to match the theme instead of Bootstrap's default blue */
 .form-check-input:checked {
   background-color: var(--accent);
   border-color: var(--accent);
