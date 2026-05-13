@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "templateVersion": "0.1.1",
+  "model": "qwen2.5-coder:7b",
   "instructions": [
     "project_docs/structure.md",
     "project_docs/conventions.md"

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <title>Dashboard - Quiz Generator</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+  <div class="container mt-4">
+    <h1>Welcome, <%= name %></h1>
+    <p class="lead">Generate a quiz on any topic using AI.</p>
+
+    <% if (error) { %>
+      <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+
+    <% if (!quiz) { %>
+      <div class="card">
+        <div class="card-body">
+          <form method="POST" action="/quiz/generate">
+            <div class="mb-3">
+              <label for="topic" class="form-label">Topic</label>
+              <input id="topic" type="text" name="topic" class="form-control" placeholder="e.g. World War II, Python programming, Biology" required>
+            </div>
+            <div class="mb-3">
+              <label for="numQuestions" class="form-label">Number of Questions (1-10)</label>
+              <input id="numQuestions" type="number" name="numQuestions" class="form-control" value="5" min="1" max="10">
+            </div>
+            <button type="submit" class="btn btn-primary">Generate Quiz</button>
+          </form>
+        </div>
+      </div>
+    <% } %>
+
+    <% if (quiz && !result) { %>
+      <div class="card mt-3">
+        <div class="card-body">
+          <h2><%= quiz.title %></h2>
+          <form method="POST" action="/quiz/submit">
+            <input type="hidden" name="title" value="<%= quiz.title %>">
+            <input type="hidden" name="topic" value="<%= quiz.topic %>">
+            <input type="hidden" name="questionsJson" value='<%= JSON.stringify(quiz.questions) %>'>
+            <% quiz.questions.forEach(function(q, i) { %>
+              <div class="mb-4 p-3 border rounded">
+                <p class="fw-bold"><%= i + 1 %>. <%= q.question %></p>
+                <% q.options.forEach(function(opt, j) { %>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="q<%= i %>" value="<%= j %>" id="q<%= i %>_<%= j %>" required>
+                    <label class="form-check-label" for="q<%= i %>_<%= j %>"><%= opt %></label>
+                  </div>
+                <% }); %>
+              </div>
+            <% }); %>
+            <button type="submit" class="btn btn-success">Submit Answers</button>
+            <a href="/dashboard" class="btn btn-secondary">New Quiz</a>
+          </form>
+        </div>
+      </div>
+    <% } %>
+
+    <% if (result) { %>
+      <div class="card mt-3">
+        <div class="card-body">
+          <h2>Results</h2>
+          <p class="display-6"><%= result.score %> / <%= result.total %> correct</p>
+          <div class="progress mb-4">
+            <div class="progress-bar <% if (result.score / result.total >= 0.7) { %>bg-success<% } else if (result.score / result.total >= 0.4) { %>bg-warning<% } else { %>bg-danger<% } %>" style="width: <%= (result.score / result.total) * 100 %>%">
+              <%= Math.round((result.score / result.total) * 100) %>%
+            </div>
+          </div>
+          <% result.results.forEach(function(r, i) { %>
+            <div class="mb-3 p-3 border rounded <%= r.correct ? 'border-success' : 'border-danger' %>">
+              <p class="fw-bold"><%= i + 1 %>. <%= r.question %></p>
+              <% r.options.forEach(function(opt, j) { %>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" disabled
+                    <% if (j === r.correctIndex) { %>checked<% } %>
+                    <% if (j === r.correctIndex) { %>class="bg-success"<% } %>>
+                  <label class="form-check-label <% if (j === r.correctIndex) { %>text-success fw-bold<% } else if (j === r.userAnswer) { %>text-danger<% } %>">
+                    <%= opt %>
+                    <% if (j === r.correctIndex) { %><span class="badge bg-success">Correct</span><% } %>
+                    <% if (j === r.userAnswer && j !== r.correctIndex) { %><span class="badge bg-danger">Your answer</span><% } %>
+                  </label>
+                </div>
+              <% }); %>
+            </div>
+          <% }); %>
+          <a href="/dashboard" class="btn btn-primary">New Quiz</a>
+        </div>
+      </div>
+    <% } %>
+
+    <% if (history && history.length > 0 && !quiz) { %>
+      <div class="card mt-4">
+        <div class="card-body">
+          <h3>Recent Quiz History</h3>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Topic</th>
+                  <th>Score</th>
+                  <th>Percentage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% history.forEach(function(h) { %>
+                  <tr>
+                    <td><%= h.timestamp.toLocaleDateString ? h.timestamp.toLocaleDateString() : h.timestamp %></td>
+                    <td><%= h.topic %></td>
+                    <td><%= h.score %> / <%= h.total %></td>
+                    <td>
+                      <span class="badge <% if (h.percentage >= 70) { %>bg-success<% } else if (h.percentage >= 40) { %>bg-warning text-dark<% } else { %>bg-danger<% } %>">
+                        <%= h.percentage %>%
+                      </span>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>

@@ -1,0 +1,858 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="998.3234138130861" height="1434.661329929609">
+  <desc>title%20OAuth2.0%20Sequence%20Diagram%0A%0A%0Aentryspacing%201.3%0A%0A%0Aparticipant%20GitHub%20API%5BA%5D%0Aparticipant%20User%0Aparticipant%20Server%0Aparticipant%20GitHub%20API%5BB%5D%0A%0Anote%20over%20User%3ABrowser%20requests%20%5Cnroot%20of%20site%0AUser-%3E(1)Server%3AGET%20%2F%5CnHost%3Alocalhost%3A3000%0AServer-%3E(1)User%3A%20200%20OK%20%2B%20index.html%20(login%20button)%0A%0Anote%20over%20User%3AUser%20clicks%20login%0A%0AUser-%3E(1)Server%3AGET%20%2Fgithub-auth%20%5CnHost%3Alocalhost%3A3000%0A%0Anote%20over%20Server%3A%20Randomly%20generates%20**state**%5CnSaves%20%7Bstate%7D%20into%20statesDirectory%20array%0A%0AServer-%3E(1)User%3A%20302%20Temporary%20Redirect%5CnLocation%3Ahttps%3A%2F%2Fgithub.com%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3D12345%26state%3Dabcdefg%0A%0Anote%20over%20User%3A(Browser%20sees%20302%2C%20%5CnCreates%20a%20new%20GET%20request%20to%20GitHub%20API%5Cnforwarding%20%7BClientID%2C%20state%7D)%0A%0A%0Aalt%20This%20can%20be%20shortcircuited%20if%20the%20user%20is%20already%20logged%20in%20and%20has%20already%20granted%20permission%0AUser-%3E(1)GitHub%20API%5BA%5D%3AGET%20%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3D12345%26state%3Dabcdefg%5CnHost%3Ahttps%3A%2F%2Fgithub.com%0AGitHub%20API%5BA%5D-%3E(1)User%3A200%20OK%20%2B%20login%20form%0AUser-%3E(1)GitHub%20API%5BA%5D%3AUser%20logs%20in%0AGitHub%20API%5BA%5D-%3E(1)User%3A200%20OK%20%2B%20Ask%20if%20you%20want%20to%20grant%20%24%7Bscope%7D%20permissions%20%5Cnto%20the%20app%20identified%20by%20%24%7Bclient_id%7D%20%0AUser-%3E(1)GitHub%20API%5BA%5D%3AUser%20says%20yes%0Aend%0A%0AGitHub%20API%5BA%5D-%3E(1)User%3A%20302%20Temporary%20Redirect%5CnLocation%3Alocalhost%3A3000%2Fcallback%3Fcode%3D%24%7Bcode%7D%26state%3D%24%7Bstate%7D%20%5Cn%5Cn(Redirect%20user%20back%20to%20Server%20with%20code%20and%20state.%20Code%20represents%20the%20users%20%5Cnexplicit%20permission%20for%20%24%7Bclient_id%7D%20to%20interact%20with%20this%20Users%20account%20%5Cnunder%20%24%7Bscope%7D%20guidelines.)%0A%0Anote%20over%20User%3A(Browser%20sees%20302%2C%20%5CnCreates%20a%20new%20GET%20request%20to%20localhost%3A3000%2Freceive_code%20%5Cnforwarding%20%7Bcode%2C%20state%7D)%0A%0A%0AUser-%3E(1)Server%3AGET%20%2Freceive_code%2Fcallback%3Fcode%3D%24%7Bcode%7D%26state%3D%24%7Bstate%7D%20%5CnHost%3Alocalhost%3A3000%0A%0Anote%20over%20Server%3A%20Uses%20**state**%20to%20verify%20the%20integrity%20of%20the%20request%0A%0AServer-%3E(1)GitHub%20API%5BB%5D%3APOST%20login%2Foauth%2Faccess_token%5CnHost%3Ahttps%3A%2F%2Fgithub.com%2F%5Cn%20%2B%20%7Bclient_id%2C%20client_secret%2C%20code%7D%5Cn%5Cn(Sends%20%7Bclient_id%2C%20client_secret%2C%20code%7D%5Cnto%20get%20access%20token%5Cnthe%20three%20components%20tell%20the%20API%5Cn**clientid**%3A%20identifies%20the%20app%5Cn(the%20app%20I%20wrote%20vs.%20the%20one%20you%20wrote%20%5Cnused%20to%20track%20resource%20usage%20and%20%5Cnin%20some%20scenarios%20used%20for%20billing)%5Cn**clientsecret**%3A%20app's%20%22password%22%20%5Cn**code**%3A%20representation%20of%20user's%20%5Cnpermission%20to%20interact%20with%20account)%0A%0AGitHub%20API%5BB%5D-%3E(1)Server%3A200%20OK%20%2B%20**access_token**%0A%0AServer-%3E(1)GitHub%20API%5BB%5D%3APOST%20user%2Frepos%5CnHost%3Ahttps%3A%2F%2Fapi.github.com%2F%5CnAccept%3A%20Application%2Fvnd.github%2Bjson%20%5CnAuthorization%3A%20Bearer%20%7Btoken%7D%0A%0AGitHub%20API%5BB%5D-%3E(1)Server%3A200%20OK%20%2B%20User%20Repos%0A%0AServer-%3E(1)User%3AServe%20the%20repos%20to%20the%20user%0A%0A%0Aalt%20This%20diagram%20is%20insipered%20by%20professor%20Raymond%20Law's%20lectures%20and%20diargrams.%0Aend%0A</desc>
+  <defs />
+  <g>
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g>
+      <rect fill="white" stroke="none" x="0" y="0" width="998" height="1434" />
+    </g>
+    <g />
+    <g>
+      <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 55.288380399999994 58.91639478327273 L 55.288380399999994 1434.661329929609" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="7.732640615384615,3.3508109333333334" />
+      <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 404.1384774858073 58.91639478327273 L 404.1384774858073 1434.661329929609" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="7.732640615384615,3.3508109333333334" />
+      <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 767.58484227181 58.91639478327273 L 767.58484227181 1434.661329929609" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="7.732640615384615,3.3508109333333334" />
+      <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 953.087466213086 58.91639478327273 L 953.087466213086 1434.661329929609" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="7.732640615384615,3.3508109333333334" />
+    </g>
+    <g>
+      <path fill="none" stroke="none" />
+      <g>
+        <path fill="white" stroke="black" paint-order="fill stroke markers" d=" M 15.343755826648433 31.77482622327273 L 95.23300497335156 31.77482622327273 L 95.23300497335156 58.91639478327273 L 15.343755826648433 58.91639478327273 L 15.343755826648433 31.77482622327273 Z" stroke-miterlimit="10" stroke-width="1.608389248" stroke-dasharray="" />
+      </g>
+      <g>
+        <g />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="26.25064541464843" y="48.86396198327273" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">GitHub API[A]</text>
+      </g>
+      <path fill="none" stroke="none" />
+      <g>
+        <path fill="white" stroke="black" paint-order="fill stroke markers" d=" M 383.38226081040494 31.77482622327273 L 424.8946941612096 31.77482622327273 L 424.8946941612096 58.91639478327273 L 383.38226081040494 58.91639478327273 L 383.38226081040494 31.77482622327273 Z" stroke-miterlimit="10" stroke-width="1.608389248" stroke-dasharray="" />
+      </g>
+      <g>
+        <g />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="394.28915039840496" y="48.86396198327273" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">User</text>
+      </g>
+      <path fill="none" stroke="none" />
+      <g>
+        <path fill="white" stroke="black" paint-order="fill stroke markers" d=" M 742.938107407931 31.77482622327273 L 792.2315771356889 31.77482622327273 L 792.2315771356889 58.91639478327273 L 742.938107407931 58.91639478327273 L 742.938107407931 31.77482622327273 Z" stroke-miterlimit="10" stroke-width="1.608389248" stroke-dasharray="" />
+      </g>
+      <g>
+        <g />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="753.8449969959311" y="48.86396198327273" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Server</text>
+      </g>
+      <path fill="none" stroke="none" />
+      <g>
+        <path fill="white" stroke="black" paint-order="fill stroke markers" d=" M 913.1428416397345 31.77482622327273 L 993.0320907864376 31.77482622327273 L 993.0320907864376 58.91639478327273 L 913.1428416397345 58.91639478327273 L 913.1428416397345 31.77482622327273 Z" stroke-miterlimit="10" stroke-width="1.608389248" stroke-dasharray="" />
+      </g>
+      <g>
+        <g />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="924.0497312277345" y="48.86396198327273" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">GitHub API[B]</text>
+      </g>
+    </g>
+    <g>
+      <g>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="10.181818181818182pt" font-style="normal" font-weight="normal" text-decoration="normal" x="410.3644027709961" y="15.170034952727274" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">OAuth2.0 Sequence Diagram</text>
+      </g>
+      <path fill="white" stroke="black" paint-order="fill stroke markers" d=" M 352.4718251058464 83.54485514327274 L 446.75794034576825 83.54485514327274 L 455.80512986576827 92.59204466327274 L 455.80512986576827 116.71788338327273 L 352.4718251058464 116.71788338327273 L 352.4718251058464 83.54485514327274 M 446.75794034576825 83.54485514327274 L 446.75794034576825 92.59204466327274 L 455.80512986576827 92.59204466327274" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+      <g>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="366.54523102584636" y="97.61826106327274" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Browser requests </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="366.54523102584636" y="107.67069386327275" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">root of site</text>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="543.380253699043" y="136.32012734327276" width="27.3793773009375" height="13.06816264" />
+        <rect fill="white" stroke="none" x="543.380253699043" y="146.37256014327275" width="84.96281235953126" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="544.888118619043" y="145.36731686327275" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">GET /</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="544.888118619043" y="155.41974966327274" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Host:localhost:3000</text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 404.1384774858073 155.54777888232317 L 759.3115032155935 165.37138236126722" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(767.58484227181,165.60021168232316) rotate(1.58431952016485,0,0) translate(-767.58484227181,-165.60021168232316)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 759.2078149384766 161.4116980156565 L 767.58484227181 165.60021168232316 L 759.2078149384766 169.78872534898983 Z" />
+          <g transform="rotate(-1.58431952016485,0,0)" />
+        </g>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="513.431408789375" y="185.20245564232317" width="144.8605021788672" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="514.939273709375" y="194.24964516232316" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">200 OK + index.html (login button)</text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 767.58484227181 195.20601875364244 L 412.41181654202376 205.0296222325865" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(404.1384774858073,205.25845155364243) rotate(-1.58431952016485,0,0) translate(-404.1384774858073,-205.25845155364243)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 412.51550481914063 201.06993788697577 L 404.1384774858073 205.25845155364243 L 412.51550481914063 209.4469652203091 Z" />
+          <g transform="rotate(1.58431952016485,0,0)" />
+        </g>
+      </g>
+      <path fill="white" stroke="black" paint-order="fill stroke markers" d=" M 356.36463211268233 224.86069551364244 L 442.8651333389323 224.86069551364244 L 451.9123228589323 233.90788503364243 L 451.9123228589323 247.98129095364243 L 356.36463211268233 247.98129095364243 L 356.36463211268233 224.86069551364244 M 442.8651333389323 224.86069551364244 L 442.8651333389323 233.90788503364243 L 451.9123228589323 233.90788503364243" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+      <g>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="370.4380380326823" y="238.9341014336424" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">User clicks login</text>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="543.380253699043" y="267.58353491364244" width="76.65785020132813" height="13.06816264" />
+        <rect fill="white" stroke="none" x="543.380253699043" y="277.63596771364246" width="84.96281235953126" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="544.888118619043" y="276.63072443364246" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">GET /github-auth </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="544.888118619043" y="286.6831572336425" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Host:localhost:3000</text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 404.1384774858073 286.8111864526928 L 759.3115032155935 296.6347899316369" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(767.58484227181,296.86361925269284) rotate(1.58431952016485,0,0) translate(-767.58484227181,-296.86361925269284)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 759.2078149384766 292.6751055860262 L 767.58484227181 296.86361925269284 L 759.2078149384766 301.0521329193595 Z" />
+          <g transform="rotate(-1.58431952016485,0,0)" />
+        </g>
+      </g>
+      <path fill="white" stroke="black" paint-order="fill stroke markers" d=" M 672.8741072502474 316.46586321269285 L 853.2483877733724 316.46586321269285 L 862.2955772933724 325.51305273269287 L 862.2955772933724 349.63889145269286 L 672.8741072502474 349.63889145269286 L 672.8741072502474 316.46586321269285 M 853.2483877733724 316.46586321269285 L 853.2483877733724 325.51305273269287 L 862.2955772933724 325.51305273269287" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+      <g>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="686.9475131702475" y="330.5392691326929" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Randomly generates </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="bold" text-decoration="normal" x="775.6324191761069" y="330.5392691326929" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">state</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="686.9475131702475" y="340.5917019326929" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Saves {state} into statesDirectory array</text>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="416.03385629914067" y="369.24113541269287" width="102.57952683707032" height="13.06816264" />
+        <rect fill="white" stroke="none" x="416.03385629914067" y="379.2935682126929" width="63.701566631992186" height="13.06816264" />
+        <rect fill="white" stroke="none" x="416.03385629914067" y="379.2935682126929" width="8.200056011875" height="13.06816264" />
+        <rect fill="white" stroke="none" x="416.03385629914067" y="379.2935682126929" width="273.78544419546876" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="417.54172121914064" y="378.2883249326929" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">302 Temporary Redirect</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="417.54172121914064" y="388.3407577326929" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Location:https:</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="478.2275580111328" y="388.3407577326929" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">//</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="483.4118841830078" y="388.3407577326929" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">github.com/login/oauth/authorize?client_id=12345&amp;state=abcdefg</text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 767.58484227181 391.99101533594614 L 412.41181654202376 401.8146188148902" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(404.1384774858073,402.04344813594616) rotate(-1.58431952016485,0,0) translate(-404.1384774858073,-402.04344813594616)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 412.51550481914063 397.8549344692795 L 404.1384774858073 402.04344813594616 L 412.51550481914063 406.23196180261283 Z" />
+          <g transform="rotate(1.58431952016485,0,0)" />
+        </g>
+      </g>
+      <path fill="white" stroke="black" paint-order="fill stroke markers" d=" M 302.42796371668624 421.6456920959462 L 496.8018017349284 421.6456920959462 L 505.8489912549284 430.6928816159462 L 505.8489912549284 464.87115313594614 L 302.42796371668624 464.87115313594614 L 302.42796371668624 421.6456920959462 M 496.8018017349284 421.6456920959462 L 496.8018017349284 430.6928816159462 L 505.8489912549284 430.6928816159462" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+      <g>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="316.5013696366862" y="435.71909801594614" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">(Browser sees 302, </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="316.5013696366862" y="445.77153081594616" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Creates a new GET request to GitHub API</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="316.5013696366862" y="455.8239636159462" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">forwarding {ClientID, state})</text>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="104.75422430122396" y="516.1385604159461" width="249.91840928335938" height="13.06816264" />
+        <rect fill="white" stroke="none" x="104.75422430122396" y="526.1909932159462" width="47.61102097769531" height="13.06816264" />
+        <rect fill="white" stroke="none" x="104.75422430122396" y="526.1909932159462" width="8.200056011875" height="13.06816264" />
+        <rect fill="white" stroke="none" x="104.75422430122396" y="526.1909932159462" width="48.654264385898436" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="106.26208922122396" y="525.1857499359462" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">GET /login/oauth/authorize?client_id=12345&amp;state=abcdefg</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="106.26208922122396" y="535.2381827359462" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Host:https:</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="150.85738035891927" y="535.2381827359462" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">//</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="156.04170653079427" y="535.2381827359462" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">github.com</text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 404.1384774858073 537.7903020795744 L 63.56144931922627 547.6043388749438" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(55.288380399999994,547.8427348795744) rotate(-1.6505732390998102,0,0) translate(-55.288380399999994,-547.8427348795744)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 63.665407733333325 543.6542212129077 L 55.288380399999994 547.8427348795744 L 63.665407733333325 552.0312485462412 Z" />
+          <g transform="rotate(1.6505732390998102,0,0)" />
+        </g>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="186.58739996040364" y="567.4449788395744" width="86.252057965" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="188.09526488040365" y="576.4921683595745" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">200 OK + login form</text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 55.288380399999994 576.6861903255714 L 395.86540856658104 586.5002271209407" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(404.1384774858073,586.7386231255714) rotate(1.6505732390998102,0,0) translate(-404.1384774858073,-586.7386231255714)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 395.76145015247397 582.5501094589047 L 404.1384774858073 586.7386231255714 L 395.76145015247397 590.9271367922381 Z" />
+          <g transform="rotate(-1.6505732390998102,0,0)" />
+        </g>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="203.5754294403841" y="606.3408670855714" width="52.27599900503906" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="205.08329436038412" y="615.3880566055715" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">User logs in</text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 404.1384774858073 615.0925530527896 L 63.56144931922627 624.906589848159" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(55.288380399999994,625.1449858527897) rotate(-1.6505732390998102,0,0) translate(-55.288380399999994,-625.1449858527897)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 63.665407733333325 620.9564721861229 L 55.288380399999994 625.1449858527897 L 63.665407733333325 629.3334995194564 Z" />
+          <g transform="rotate(1.6505732390998102,0,0)" />
+        </g>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="111.64690160835286" y="644.7472298127897" width="236.13305466910157" height="13.06816264" />
+        <rect fill="white" stroke="none" x="111.64690160835286" y="654.7996626127897" width="147.7396525694922" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="113.15476652835287" y="653.7944193327897" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">200 OK + Ask if you want to grant ${scope} permissions </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="113.15476652835287" y="663.8468521327898" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">to the app identified by ${client_id} </text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 55.288380399999994 666.2003527114504 L 395.86540856658104 676.0143895068197" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(404.1384774858073,676.2527855114504) rotate(1.6505732390998102,0,0) translate(-404.1384774858073,-676.2527855114504)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 395.76145015247397 672.0642718447837 L 404.1384774858073 676.2527855114504 L 395.76145015247397 680.4412991781171 Z" />
+          <g transform="rotate(-1.6505732390998102,0,0)" />
+        </g>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="198.91270208442708" y="695.8550294714504" width="61.601453716953124" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="200.42056700442708" y="704.9022189914505" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">User says yes</text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 404.1384774858073 704.7410761678243 L 63.56144931922627 714.5551129631937" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(55.288380399999994,714.7935089678243) rotate(-1.6505732390998102,0,0) translate(-55.288380399999994,-714.7935089678243)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 63.665407733333325 710.6049953011576 L 55.288380399999994 714.7935089678243 L 63.665407733333325 718.982022634491 Z" />
+          <g transform="rotate(1.6505732390998102,0,0)" />
+        </g>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="67.18375921333333" y="753.9979968878243" width="102.57952683707032" height="13.06816264" />
+        <rect fill="white" stroke="none" x="67.18375921333333" y="764.0504296878244" width="266.01359360953126" height="13.06816264" />
+        <rect fill="white" stroke="none" x="67.18375921333333" y="784.1552952878244" width="325.05936997671876" height="13.06816264" />
+        <rect fill="white" stroke="none" x="67.18375921333333" y="794.2077280878244" width="285.63468735953126" height="13.06816264" />
+        <rect fill="white" stroke="none" x="67.18375921333333" y="804.2601608878244" width="116.09612839957032" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="68.69162413333333" y="763.0451864078244" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">302 Temporary Redirect</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="68.69162413333333" y="773.0976192078244" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Location:localhost:3000/callback?code=${code}&amp;state=${state} </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="68.69162413333333" y="793.2024848078245" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">(Redirect user back to Server with code and state. Code represents the users </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="68.69162413333333" y="803.2549176078245" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">explicit permission for ${client_id} to interact with this Users account </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="68.69162413333333" y="813.3073504078245" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">under ${scope} guidelines.)</text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 55.288380399999994 816.9420968704236 L 395.86540856658104 826.756133665793" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(404.1384774858073,826.9945296704236) rotate(1.6505732390998102,0,0) translate(-404.1384774858073,-826.9945296704236)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 395.76145015247397 822.8060160037569 L 404.1384774858073 826.9945296704236 L 395.76145015247397 831.1830433370903 Z" />
+          <g transform="rotate(-1.6505732390998102,0,0)" />
+        </g>
+      </g>
+      <path fill="white" stroke="black" paint-order="fill stroke markers" d=" M 265.3358540365104 846.5967736304236 L 533.8939114151042 846.5967736304236 L 542.9411009351041 855.6439631504236 L 542.9411009351041 889.8222346704237 L 265.3358540365104 889.8222346704237 L 265.3358540365104 846.5967736304236 M 533.8939114151042 846.5967736304236 L 533.8939114151042 855.6439631504236 L 542.9411009351041 855.6439631504236" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+      <g>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="279.4092599565104" y="860.6701795504238" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">(Browser sees 302, </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="279.4092599565104" y="870.7226123504238" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Creates a new GET request to localhost:3000/receive_code </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="279.4092599565104" y="880.7750451504238" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">forwarding {code, state})</text>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="461.9433793093946" y="909.4244786304237" width="247.83656113882813" height="13.06816264" />
+        <rect fill="white" stroke="none" x="461.9433793093946" y="919.4769114304237" width="84.96281235953126" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="463.45124422939455" y="918.4716681504237" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">GET /receive_code/callback?code=${code}&amp;state=${state} </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="463.45124422939455" y="928.5241009504238" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Host:localhost:3000</text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 404.1384774858073 930.9045635036911 L 759.3115032155935 940.7281669826351" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(767.58484227181,940.9569963036911) rotate(1.58431952016485,0,0) translate(-767.58484227181,-940.9569963036911)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 759.2078149384766 936.7684826370244 L 767.58484227181 940.9569963036911 L 759.2078149384766 945.1455099703578 Z" />
+          <g transform="rotate(-1.58431952016485,0,0)" />
+        </g>
+      </g>
+      <path fill="white" stroke="black" paint-order="fill stroke markers" d=" M 657.8336485710482 960.5592402636911 L 868.2888464525716 960.5592402636911 L 877.3360359725716 969.606429783691 L 877.3360359725716 983.6798357036911 L 657.8336485710482 983.6798357036911 L 657.8336485710482 960.5592402636911 M 868.2888464525716 960.5592402636911 L 868.2888464525716 969.606429783691 L 877.3360359725716 969.606429783691" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+      <g>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="671.9070544910483" y="974.6326461836911" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Uses </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="bold" text-decoration="normal" x="695.7559161853842" y="974.6326461836911" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">state</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="717.5364795398764" y="974.6326461836911" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve"> to verify the integrity of the request</text>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1003.2820796636911" width="136.305036480625" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1013.3345124636911" width="47.61102097769531" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1013.3345124636911" width="8.200056011875" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1013.3345124636911" width="51.246427471835936" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1023.3869452636911" width="137.08856004019532" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1043.4918108636912" width="158.60946458121094" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1053.544243663691" width="83.40478318472657" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1063.596676463691" width="140.97453110953126" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1073.649109263691" width="35.675199444492186" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1073.649109263691" width="78.74430650015626" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1083.7015420636908" width="161.71186631460938" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1093.7539748636907" width="144.08605759878907" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1103.8064076636906" width="144.06780808707032" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1113.8588404636905" width="54.877271588046874" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1113.8588404636905" width="81.95153611441407" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1123.9112732636904" width="24.791761334140624" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1123.9112732636904" width="108.00069993277344" height="13.06816264" />
+        <rect fill="white" stroke="none" x="779.4802210851433" y="1133.9637060636903" width="149.24760239859376" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="780.9880860051433" y="1012.3292691836912" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">POST login/oauth/access_token</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="780.9880860051433" y="1022.3817019836912" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Host:https:</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="825.5833771428386" y="1022.3817019836912" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">//</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="830.7677033147136" y="1022.3817019836912" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">github.com/</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="780.9880860051433" y="1032.4341347836912" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve"> + {client_id, client_secret, code}</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="780.9880860051433" y="1052.539000383691" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">(Sends {client_id, client_secret, code}</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="780.9880860051433" y="1062.591433183691" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">to get access token</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="780.9880860051433" y="1072.6438659836908" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">the three components tell the API</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="bold" text-decoration="normal" x="780.9880860051433" y="1082.6962987836907" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">clientid</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="813.6475556096354" y="1082.6962987836907" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">: identifies the app</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="780.9880860051433" y="1092.7487315836906" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">(the app I wrote vs. the one you wrote </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="780.9880860051433" y="1102.8011643836905" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">used to track resource usage and </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="780.9880860051433" y="1112.8535971836905" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">in some scenarios used for billing)</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="bold" text-decoration="normal" x="780.9880860051433" y="1122.9060299836904" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">clientsecret</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="832.8496277531901" y="1122.9060299836904" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">: app's "password" </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="bold" text-decoration="normal" x="780.9880860051433" y="1132.9584627836903" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">code</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="802.7641174992839" y="1132.9584627836903" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">: representation of user's </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="780.9880860051433" y="1143.0108955836902" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">permission to interact with account)</text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 767.58484227181 1146.3055436303919 L 944.8230888263319 1155.9101277878815" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(953.087466213086,1156.3579764303918) rotate(3.101838484405024,0,0) translate(-953.087466213086,-1156.3579764303918)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 944.7104388797527 1152.169462763725 L 953.087466213086 1156.3579764303918 L 944.7104388797527 1160.5464900970585 Z" />
+          <g transform="rotate(-3.101838484405024,0,0)" />
+        </g>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="807.0897334142448" y="1175.960220390392" width="45.28764146109375" height="13.06816264" />
+        <rect fill="white" stroke="none" x="807.0897334142448" y="1175.960220390392" width="64.2209300353125" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="808.5975983342448" y="1185.0074099103917" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">200 OK + </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="bold" text-decoration="normal" x="850.8695099553386" y="1185.0074099103917" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">access_token</text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 953.087466213086 1186.805891695763 L 775.8492196585642 1196.4104758532526" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(767.58484227181,1196.8583244957629) rotate(-3.101838484405024,0,0) translate(-767.58484227181,-1196.8583244957629)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 775.9618696051433 1192.6698108290961 L 767.58484227181 1196.8583244957629 L 775.9618696051433 1201.0468381624296 Z" />
+          <g transform="rotate(3.101838484405024,0,0)" />
+        </g>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="783.7511485143425" y="1216.460568455763" width="75.0907267882422" height="13.06816264" />
+        <rect fill="white" stroke="none" x="783.7511485143425" y="1226.513001255763" width="47.61102097769531" height="13.06816264" />
+        <rect fill="white" stroke="none" x="783.7511485143425" y="1226.513001255763" width="8.200056011875" height="13.06816264" />
+        <rect fill="white" stroke="none" x="783.7511485143425" y="1226.513001255763" width="66.28918259878907" height="13.06816264" />
+        <rect fill="white" stroke="none" x="783.7511485143425" y="1236.5654340557628" width="153.17001145621094" height="13.06816264" />
+        <rect fill="white" stroke="none" x="783.7511485143425" y="1246.6178668557627" width="122.31002610464844" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="785.2590134343425" y="1225.5077579757628" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">POST user/repos</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="785.2590134343425" y="1235.5601907757627" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Host:https:</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="829.8543045720378" y="1235.5601907757627" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">//</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="835.0386307439128" y="1235.5601907757627" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">api.github.com/</text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="785.2590134343425" y="1245.6126235757627" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Accept: Application/vnd.github+json </text>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="785.2590134343425" y="1255.6650563757626" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Authorization: Bearer {token}</text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 767.58484227181 1258.7282618150034 L 944.8230888263319 1268.332845972493" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(953.087466213086,1268.7806946150033) rotate(3.101838484405024,0,0) translate(-953.087466213086,-1268.7806946150033)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 944.7104388797527 1264.5921809483366 L 953.087466213086 1268.7806946150033 L 944.7104388797527 1272.96920828167 Z" />
+          <g transform="rotate(-3.101838484405024,0,0)" />
+        </g>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="813.0621836705925" y="1288.3829385750032" width="94.54794114371094" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="814.5700485905925" y="1297.430128095003" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">200 OK + User Repos</text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 953.087466213086 1298.9049613325658 L 775.8492196585642 1308.5095454900554" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(767.58484227181,1308.9573941325657) rotate(-3.101838484405024,0,0) translate(-767.58484227181,-1308.9573941325657)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 775.9618696051433 1304.768880465899 L 767.58484227181 1308.9573941325657 L 775.9618696051433 1313.1459077992324 Z" />
+          <g transform="rotate(3.101838484405024,0,0)" />
+        </g>
+      </g>
+      <g>
+        <rect fill="white" stroke="none" x="528.082386877754" y="1328.5596380925656" width="115.55854600210938" height="13.06816264" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="7pt" font-style="normal" font-weight="normal" text-decoration="normal" x="529.5902517977539" y="1337.6068276125654" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">Serve the repos to the user</text>
+      </g>
+      <g>
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 767.58484227181 1338.1579750496094 L 412.41181654202376 1347.9815785285534" stroke-miterlimit="10" stroke-width="0.8377027333333333" stroke-dasharray="" />
+        <g transform="translate(404.1384774858073,1348.2104078496093) rotate(-1.58431952016485,0,0) translate(-404.1384774858073,-1348.2104078496093)">
+          <path fill="black" stroke="none" paint-order="stroke fill markers" d=" M 412.51550481914063 1344.0218941829426 L 404.1384774858073 1348.2104078496093 L 412.51550481914063 1352.398921516276 Z" />
+          <g transform="rotate(1.58431952016485,0,0)" />
+        </g>
+      </g>
+      <g>
+        <g />
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 20.104865599999997 484.4733970959461 L 439.3219922858073 484.4733970959461 L 439.3219922858073 734.3957529278243 L 20.104865599999997 734.3957529278243 L 20.104865599999997 484.4733970959461 Z" stroke-miterlimit="10" stroke-width="1.4360618285714286" stroke-dasharray="" />
+        <path fill="white" stroke="black" paint-order="fill stroke markers" d=" M 20.104865599999997 484.4733970959461 L 20.104865599999997 496.5363164559461 L 48.91548071171874 496.5363164559461 L 54.94694039171874 490.5048567759461 L 54.94694039171874 484.4733970959461 L 20.104865599999997 484.4733970959461" stroke-miterlimit="10" stroke-width="1.4360618285714286" stroke-dasharray="" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="5.6000000000000005pt" font-style="normal" font-weight="bold" text-decoration="normal" x="30.157298399999995" y="492.5153433359461" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">alt</text>
+        <g>
+          <rect fill="white" stroke="none" x="63.49150827171874" y="485.2775917199461" width="340.04459946890626" height="10.454530112" />
+        </g>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="5.6000000000000005pt" font-style="normal" font-weight="bold" text-decoration="normal" x="64.99937319171875" y="492.5153433359461" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">[This can be shortcircuited if the user is already logged in and has already granted permission]</text>
+      </g>
+      <g>
+        <g />
+        <path fill="none" stroke="black" paint-order="fill stroke markers" d=" M 10.052432799999998 1367.8126518096092 L 988.270981013086 1367.8126518096092 L 988.270981013086 1399.477815129609 L 10.052432799999998 1399.477815129609 L 10.052432799999998 1367.8126518096092 Z" stroke-miterlimit="10" stroke-width="1.4360618285714286" stroke-dasharray="" />
+        <path fill="white" stroke="black" paint-order="fill stroke markers" d=" M 10.052432799999998 1367.8126518096092 L 10.052432799999998 1379.8755711696092 L 38.86304791171875 1379.8755711696092 L 44.89450759171875 1373.844111489609 L 44.89450759171875 1367.8126518096092 L 10.052432799999998 1367.8126518096092" stroke-miterlimit="10" stroke-width="1.4360618285714286" stroke-dasharray="" />
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="5.6000000000000005pt" font-style="normal" font-weight="bold" text-decoration="normal" x="20.104865599999997" y="1375.8545980496092" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">alt</text>
+        <g>
+          <rect fill="white" stroke="none" x="53.439075471718745" y="1368.6168464336092" width="290.00660508414063" height="10.454530112" />
+        </g>
+        <text fill="black" stroke="none" font-family="sans-serif" font-size="5.6000000000000005pt" font-style="normal" font-weight="bold" text-decoration="normal" x="54.94694039171875" y="1375.8545980496092" text-anchor="start" dominant-baseline="alphabetic" xml:space="preserve">[This diagram is insipered by professor Raymond Law's lectures and diargrams.]</text>
+      </g>
+    </g>
+    <g />
+    <g />
+    <g />
+    <g />
+  </g>
+</svg>
