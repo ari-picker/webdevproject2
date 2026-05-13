@@ -83,19 +83,14 @@ The app uses a two-layer security architecture:
 ### Render (Hosting)
 The Express server runs on Render's free tier at `https://webdevproject2.onrender.com`. Render pulls the latest code from GitHub, installs dependencies, and starts the server. Environment variables (database URI, API keys) are set in Render's dashboard.
 
-### Cloudflare Zero Trust (Access Gateway)
-All traffic to the app goes through Cloudflare's edge network. Cloudflare Access sits in front:
+### Cloudflare Proxy (DDoS protection + origin masking)
+All traffic routes through Cloudflare's edge network. Cloudflare proxies the domain and forwards legitimate traffic to Render:
 
 ```
-User → quiz.ari.re → Cloudflare Access (auth gate) → Render (Express server)
+User → quiz.ari.re → Cloudflare (proxied DNS) → Render (Express server)
 ```
 
-1. A user visits `https://quiz.ari.re`
-2. Cloudflare checks if they're authenticated (email match)
-3. If not, they see a Cloudflare login page
-4. After login, Cloudflare adds the `Cf-Access-Authenticated-User-Email` header
-5. The Express middleware in `app.js` checks for this header — without it, the server returns 403
-6. This means even hitting the Render URL directly (`webdevproject2.onrender.com`) is blocked
+The Express middleware in `app.js` checks for Cloudflare's `cf-ray` header — Cloudflare adds this header to every proxied request. Requests without it (direct Render URL access) get a 403. This hides the origin server completely.
 
 ### Cloudflare DNS Setup
 ```
@@ -107,7 +102,7 @@ Proxy status: Proxied (orange cloud)
 
 ## Test Credentials
 
-1. Visit `https://quiz.ari.re` (you'll need Cloudflare Access — contact the admin)
+1. Visit `https://quiz.ari.re`
 2. Create an account at `/signup`
 3. Sign in and generate a quiz
 
