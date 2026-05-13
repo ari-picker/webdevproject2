@@ -101,7 +101,7 @@ router.post("/submit", async (req, res) => {
 
     // Loop over each question — req.body["q" + i] is the radio button value the user selected
     let results = questions.map((q, i) => {
-      let userAnswer = parseInt(req.body["q" + i]) || -1;
+      let userAnswer = req.body["q" + i] !== undefined ? parseInt(req.body["q" + i]) : -1;
       let correct = userAnswer === q.correctIndex;
       if (correct) score++;
       return {
