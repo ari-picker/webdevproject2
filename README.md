@@ -23,11 +23,7 @@ A full-stack web application that generates multiple-choice quizzes on any topic
 
 1. Clone the repository
 2. Install dependencies: `npm install`
-3. Create a `.env` file:
-   ```
-   ATLAS_URI="your-mongodb-atlas-connection-string"
-   GROQ_API_KEY="your-groq-api-key"
-   ```
+3. Create a `.env` file with `ATLAS_URI` and `GROQ_API_KEY`
 4. Start the server: `npm start` (or `npm run dev` for development with nodemon)
 5. Visit `http://localhost:3000`
 
@@ -80,6 +76,43 @@ A full-stack web application that generates multiple-choice quizzes on any topic
 | POST   | `/quiz/submit`      | Submit answers       | Yes |
 | GET    | `/users/logout`     | Log out              | Yes |
 
+## Deployment Architecture
+
+The app uses a two-layer security architecture:
+
+### Render (Hosting)
+The Express server runs on Render's free tier at `https://webdevproject2.onrender.com`. Render pulls the latest code from GitHub, installs dependencies, and starts the server. Environment variables (database URI, API keys) are set in Render's dashboard.
+
+### Cloudflare Zero Trust (Access Gateway)
+All traffic to the app goes through Cloudflare's edge network. Cloudflare Access sits in front:
+
+```
+User → quiz.ari.re → Cloudflare Access (auth gate) → Render (Express server)
+```
+
+1. A user visits `https://quiz.ari.re`
+2. Cloudflare checks if they're authenticated (email match)
+3. If not, they see a Cloudflare login page
+4. After login, Cloudflare adds the `Cf-Access-Authenticated-User-Email` header
+5. The Express middleware in `app.js` checks for this header — without it, the server returns 403
+6. This means even hitting the Render URL directly (`webdevproject2.onrender.com`) is blocked
+
+### Cloudflare DNS Setup
+```
+Type: CNAME
+Name: quiz
+Target: webdevproject2.onrender.com
+Proxy status: Proxied (orange cloud)
+```
+
 ## Test Credentials
 
-Create an account at `/signup` to test the application.
+1. Visit `https://quiz.ari.re` (you'll need Cloudflare Access — contact the admin)
+2. Create an account at `/signup`
+3. Sign in and generate a quiz
+
+Or run locally:
+1. `npm install`
+2. Set up `.env` with `ATLAS_URI` and `GROQ_API_KEY`
+3. `npm start`
+4. Visit `http://localhost:3000`
