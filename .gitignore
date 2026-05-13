@@ -15,3 +15,4 @@ build/
 .direnv/
 *.log
 node_modules/
+webdev-notes/
