@@ -35,8 +35,8 @@ app.use(function(req, res, next) {
     next();
     return;
   }
-  if (!req.headers['cf-access-authenticated-user-email']) {
-    res.status(403).send("Access denied. Use Cloudflare Access to reach this site.");
+  if (!req.headers['cf-ray']) {
+    res.status(403).send("Access denied. This site must be accessed through Cloudflare.");
     return;
   }
   next();
